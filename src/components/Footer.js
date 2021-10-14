@@ -41,7 +41,7 @@ export default function footer() {
                         rel="noreferrer"
                         href="https://github.com/creativetimofficial/material-tailwind-dashboard-react/blob/main/LICENSE?ref=mtdk"
                     >
-                        MIT License
+                        MIT Licensesss
                     </a>
                 </li>
                 <li>
