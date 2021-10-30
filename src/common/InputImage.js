@@ -33,7 +33,7 @@ export default function InputImage({
           accept="image/*"
           className={`${
             disable ? "bg-gray-300" : ""
-          }  transition-all duration-300 ease-linear group w-full outline-none font-light pr-4 pl-12 py-2 border-b-[3px] text-sm ${
+          }  transition-all duration-300 ease-linear group w-full outline-none font-light pr-4 pl-12 py-2 border-b-[3px] text-sm  ${
             errors ? "border-red-500" : "border-gray-500  focus:border-blue-500"
           } `}
           placeholder={placeholder}

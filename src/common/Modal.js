@@ -12,7 +12,7 @@ export default function Modals({
   arrInput,
   handleSubmit,
   reset,
-  props
+
 }) {
   const onClose = () => {
     setModal(false);

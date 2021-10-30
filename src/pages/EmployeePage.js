@@ -141,7 +141,7 @@ export default function EmployeePage() {
       }
     } catch (err) {
       hidden();
-      notificationErorr(INSERT_USER_FAIL_USERNAME, 3000);
+      notificationErorr("Tên tài khoản hoắc email đã trùng", 3000);
       console.log(err);
     }
   };
@@ -169,7 +169,7 @@ export default function EmployeePage() {
             }
           } catch (err) {
             hidden();
-            notificationErorr(UPDATE_USER_FAIL, 3000);
+            notificationErorr("Tên tài khoản hoắc email đã trùng", 3000);
             console.log(err);
           }
       }

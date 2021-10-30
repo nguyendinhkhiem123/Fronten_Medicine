@@ -1,88 +1,81 @@
-import {useEffect} from 'react';
+import { useState } from "react";
+import Tab from "@material-tailwind/react/Tab";
+import TabList from "@material-tailwind/react/TabList";
+import TabItem from "@material-tailwind/react/TabItem";
+import TabContent from "@material-tailwind/react/TabContent";
+import TabPane from "@material-tailwind/react/TabPane";
 
-import StatusCard from 'components/StatusCard';
-import ChartLine from 'components/ChartLine';
-import ChartBar from 'components/ChartBar';
-import PageVisitsCard from 'components/PageVisitsCard';
-import TrafficCard from 'components/TrafficCard';
+import StaticsExport from "Statics/StaticsExport/index";
+import StaticsOrder from "Statics/StaticsOrder/index";
+import StaticsImport from "Statics/StaticsImport/index";
+import StaticsProfit from "Statics/StaticsProfit/index";
 
 export default function Dashboard() {
-    useEffect(() => {
-        document.title='Thống kê'
-    }, [])
-    return (
-        <>
+  const [openTab, setOpenTab] = useState(1);
 
+  return (
+    <Tab>
+      <TabList color="red">
+        <TabItem
+          onClick={(e) => {
+            e.preventDefault();
+            setOpenTab(1);
+          }}
+          ripple="light"
+          active={openTab === 1 ? true : false}
+          href="tabItem"
+        >
+          Doanh thu
+        </TabItem>
+        <TabItem
+          onClick={(e) => {
+            e.preventDefault();
+            setOpenTab(2);
+          }}
+          ripple="light"
+          active={openTab === 2 ? true : false}
+          href="tabItem"
+        >
+          Phiếu nhập
+        </TabItem>
+        <TabItem
+          onClick={(e) => {
+            e.preventDefault();
+            setOpenTab(3);
+          }}
+          ripple="light"
+          active={openTab === 3 ? true : false}
+          href="tabItem"
+        >
+          Lợi nhuận
+        </TabItem>
+        <TabItem
+          onClick={(e) => {
+            e.preventDefault();
+            setOpenTab(4);
+          }}
+          ripple="light"
+          active={openTab === 4 ? true : false}
+          href="tabItem"
+        >
+          Đơn hàng
+        </TabItem>
+      </TabList>
 
-                    <div className="grid grid-cols-1 xl:grid-cols-5">
-                        <div className="xl:col-start-1 xl:col-end-4 px-4 mb-14">
-                            <ChartLine />
-                        </div>
-                        <div className="xl:col-start-4 xl:col-end-6 px-4 mb-14">
-                            <ChartBar />
-                        </div>
-                    </div>
-            
-       {/* <div className="px-3 md:px-8">
-                <div className="container mx-auto max-w-full">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 mb-4">
-                        <StatusCard
-                            color="pink"
-                            icon="trending_up"
-                            title="Traffic"
-                            amount="350,897"
-                            percentage="3.48"
-                            percentageIcon="arrow_upward"
-                            percentageColor="green"
-                            date="Since last month"
-                        />
-                        <StatusCard
-                            color="orange"
-                            icon="groups"
-                            title="New Users"
-                            amount="2,356"
-                            percentage="3.48"
-                            percentageIcon="arrow_downward"
-                            percentageColor="red"
-                            date="Since last week"
-                        />
-                        <StatusCard
-                            color="purple"
-                            icon="paid"
-                            title="Sales"
-                            amount="924"
-                            percentage="1.10"
-                            percentageIcon="arrow_downward"
-                            percentageColor="orange"
-                            date="Since yesterday"
-                        />
-                        <StatusCard
-                            color="blue"
-                            icon="poll"
-                            title="Performance"
-                            amount="49,65%"
-                            percentage="12"
-                            percentageIcon="arrow_upward"
-                            percentageColor="green"
-                            date="Since last month"
-                        />
-                    </div>
-                </div>
-            </div>
-      */}
-{/* 
-            <div className="px-3 md:px-8 h-auto">
-                <div className="container mx-auto max-w-full">
-                    <div className="grid grid-cols-1 xl:grid-cols-5">
-                        <div className="xl:col-start-1 xl:col-end-4 px-4 mb-14">
-                            <PageVisitsCard />
-                        </div>
-                        <div className="xl:col-start-4 xl:col-end-6 px-4 mb-14">
-                            <TrafficCard />
-                        </div>
-                    </div>
-                </div>
-            </div> */}
-        </>
-    );
+      <TabContent>
+        <TabPane active={openTab === 1 ? true : false}>
+          <StaticsExport />
+        </TabPane>
+        <TabPane active={openTab === 2 ? true : false}>
+          <StaticsImport/>
+        </TabPane>
+        <TabPane active={openTab === 3 ? true : false}>
+          <StaticsProfit/>
+        </TabPane>
+        <TabPane active={openTab === 4 ? true : false}>
+          <StaticsOrder />
+        </TabPane>
+      </TabContent>
+    </Tab>
+  );
 }

@@ -8,6 +8,8 @@ import Category from './Category';
 import Employee from './Employee';
 import Medicine from './Medicine';
 import Product from './Product';
+import Order from './Order';
+import Import from './Import';
 
 const reducer = combineReducers({
     Login,
@@ -15,13 +17,15 @@ const reducer = combineReducers({
     Category,
     Employee,
     Medicine,
-    Product
+    Product,
+    Order,
+    Import
 })
 
 const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['Login' , 'CurrentUser','Category' ,'Employee' ,'Medicine' ,'Product'] //
+    whitelist: ['Login' ,'Import', 'CurrentUser','Category' ,'Employee' ,'Medicine' ,'Product' ,'Order'] //
 }
    
 const persistedReducer = persistReducer(persistConfig, reducer)

@@ -4,8 +4,12 @@ import Table from "../common/Table";
 import useLoading from "../hook/HookLoading";
 import { notificationSuccess, notificationErorr } from "helper/Notification";
 
-
-import { getAllMedicine , updateMedicine , deleteMedicine } from "api/Medicine";
+import {
+  getAllMedicine,
+  updateMedicine,
+  deleteMedicine,
+  insertMedicine,
+} from "api/Medicine";
 import { getMedicine } from "reducer/Medicine";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -19,12 +23,11 @@ import { schemaMedicine } from "hookform";
 import InputText from "../common/InputText";
 import InputPasword from "../common/InputPassword";
 
-
 import {
   DELELTE_USER_SUCCESS,
   DELELTE_USER_FAIL,
-  UPDATE_USER_FAIL ,
-  UPDATE_USER_SUCCESS
+  UPDATE_USER_FAIL,
+  UPDATE_USER_SUCCESS,
 } from "constants/Respone";
 
 const TITLE = "Nhà thuốc";
@@ -44,9 +47,20 @@ export default function EmployeePage() {
   const [hidden, display, Loading] = useLoading();
   const dispatch = useDispatch();
   const listMedicine = useSelector((state) => state.Medicine);
+
+  const [modalInsert, setModalInsert] = useState(false);
   const [modalUpdate, setModalUpdate] = useState(false);
 
-  const [ search , setSearch ] = useState("");
+  const [search, setSearch] = useState("");
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schemaMedicine),
+  });
 
   const {
     register: registerUpdate,
@@ -69,7 +83,7 @@ export default function EmployeePage() {
           temp[index].password = element.taikhoan.password;
           temp[index].matk = element.taikhoan.matk;
         });
-        
+
         temp.forEach((value) => {
           delete value["taikhoan"];
         });
@@ -87,11 +101,8 @@ export default function EmployeePage() {
   }, []);
 
   const onUpdate = (value) => {
-    resetUpdate(
-       value
-    )
+    resetUpdate(value);
     setModalUpdate(true);
-   
   };
   const onDelete = async (value) => {
     if (window.confirm("Bạn có chắc chắn xóa ?")) {
@@ -99,7 +110,6 @@ export default function EmployeePage() {
         display();
         const res = await deleteMedicine(value.matk);
         if (res.status === 200) {
-        
           hidden();
           getListMedicine();
           notificationSuccess(DELELTE_USER_SUCCESS, 1000);
@@ -111,43 +121,74 @@ export default function EmployeePage() {
       }
     }
   };
-  const handleSubmitUpdateS = async(value) => {
-    if(window.confirm('Bạn có chắc chắn sửa ?')){
+  const handleSubmitUpdateS = async (value) => {
+    if (window.confirm("Bạn có chắc chắn sửa ?")) {
       try {
-          display();
-          const res = await updateMedicine(value);
-          if (res.status === 200) {
-            notificationSuccess(UPDATE_USER_SUCCESS, 1000);
-            setModalUpdate(false);
-            resetUpdate({});
-            hidden();
-            getListMedicine();
-          }
-        } catch (err) {
+        display();
+        const res = await updateMedicine(value);
+        if (res.status === 200) {
+          notificationSuccess(UPDATE_USER_SUCCESS, 1000);
+          setModalUpdate(false);
+          resetUpdate({});
           hidden();
-          notificationErorr(UPDATE_USER_FAIL, 3000);
-          console.log(err);
+          getListMedicine();
         }
+      } catch (err) {
+        hidden();
+        notificationErorr("Tên tài khoản hoắc email đã trùng", 3000);
+        console.log(err);
+      }
     }
-};
+  };
 
   let temp = [];
-  if(listMedicine.length > 0){
-      temp = listMedicine.filter(value=>{
-          return (value.manhathuoc.toLowerCase().trim().indexOf(search.toLowerCase().trim()) !== -1
-          || value.tennhathuoc.toLowerCase().trim().indexOf(search.toLowerCase().trim()) !== -1
-          || value.diachi.toLowerCase().trim().indexOf(search.toLowerCase().trim()) !== -1
-          )
-      })
+  if (listMedicine.length > 0) {
+    temp = listMedicine.filter((value) => {
+      return (
+        value.manhathuoc
+          .toLowerCase()
+          .trim()
+          .indexOf(search.toLowerCase().trim()) !== -1 ||
+        value.tennhathuoc
+          .toLowerCase()
+          .trim()
+          .indexOf(search.toLowerCase().trim()) !== -1 ||
+        value.diachi
+          .toLowerCase()
+          .trim()
+          .indexOf(search.toLowerCase().trim()) !== -1
+      );
+    });
   }
- 
+
+  const onAdd = () => {
+    setModalInsert(true);
+  };
+  const handleSubmitInsert = async (value) => {
+    console.log(value);
+    try{
+      display(hidden);
+      const res = await insertMedicine(value);
+      if(res.status === 200){
+        notificationSuccess("Thêm thành công" , 1000)
+        getListMedicine(); 
+        setModalInsert(false);
+        reset({});
+      }
+    }catch(err){
+      hidden();
+      console.log(err);
+      notificationErorr("Tên tài khoản hoắc email đã trùng", 3000)
+    }
+  };
   return (
     <>
-      <Table 
-        setSearch = {setSearch}
+      <Table
+        setSearch={setSearch}
         title="NHÀ THUỐC"
         arrTitle={arrTitle}
         arrContent={temp}
+        onAdd={onAdd}
         arrActivity={[
           {
             title: "Sửa",
@@ -163,12 +204,62 @@ export default function EmployeePage() {
           },
         ]}
       />
-      
+      <Modal
+        key={1}
+        modal={modalInsert}
+        setModal={setModalInsert}
+        title="Thêm nhân viên"
+        reset={reset}
+        handleSubmit={handleSubmit(handleSubmitInsert)}
+        arrInput={[
+          <InputText
+            name="username"
+            register={register}
+            errors={errors.username}
+            value=""
+            placeholder="Tên tài khoản"
+            icon="person"
+          />,
+          <InputPasword register={register} errors={errors.password} />,
+          <InputText
+            name="tennhathuoc"
+            register={register}
+            errors={errors.tennhathuoc}
+            value=""
+            placeholder="Tên nhà thuốc"
+            icon="drive_file_rename_outline"
+          />,
+          <InputText
+            name="email"
+            register={register}
+            errors={errors.email}
+            value=""
+            placeholder="Email nhà thuốc"
+            icon="email"
+          />,
+          <InputText
+            name="diachi"
+            register={register}
+            errors={errors.diachi}
+            value=""
+            placeholder="Địa chỉ"
+            icon="add_location"
+          />,
+          <InputText
+            name="sdt"
+            register={register}
+            errors={errors.sdt}
+            value=""
+            placeholder="Số điện thoại"
+            icon="phone"
+          />,
+        ]}
+      />
       <Modal
         key={2}
         modal={modalUpdate}
         setModal={setModalUpdate}
-        title="Sửa nhân viên"
+        title="Sửa thông tin nhà thuốc"
         reset={resetUpdate}
         handleSubmit={handleSubmitUpdate(handleSubmitUpdateS)}
         arrInput={[
@@ -190,13 +281,16 @@ export default function EmployeePage() {
             icon="person"
             disable={true}
           />,
-          <InputPasword register={registerUpdate} errors={errorsUpdate.password} />,
+          <InputPasword
+            register={registerUpdate}
+            errors={errorsUpdate.password}
+          />,
           <InputText
             name="tennhathuoc"
             register={registerUpdate}
             errors={errorsUpdate.tennhathuoc}
             value=""
-            placeholder="Tên nhân viên"
+            placeholder="Tên nhà thuốc"
             icon="drive_file_rename_outline"
           />,
           <InputText
@@ -204,7 +298,7 @@ export default function EmployeePage() {
             register={registerUpdate}
             errors={errorsUpdate.email}
             value=""
-            placeholder="Email nhân viên"
+            placeholder="Email nhà thuốc"
             icon="email"
           />,
           <InputText

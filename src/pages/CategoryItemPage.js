@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Table from "../common/Table";
 
+import axios from "axios";
 import useLoading from "../hook/HookLoading";
 import { notificationSuccess, notificationErorr } from "helper/Notification";
 
@@ -13,19 +14,23 @@ import {
   updateProduct,
 } from "api/Product";
 
+import { uploadImage } from "api/upload";
+
 import { toBase64 } from "../utils";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { schemaProduct } from "hookform";
 
 import Modal from "common/Modal";
-import { schemaProduct } from "hookform";
 
 import InputText from "../common/InputText";
 import InputImage from "common/InputImage";
 import InputNumber from "common/InputNumber";
 import InputTextarea from "common/InputTextarea";
 import InputSelection from "common/InputSelection";
+
+import { formatMoney, stringToNumber } from "utils";
 
 import {
   UPDATE_USER_SUCCESS,
@@ -100,16 +105,15 @@ export default function CategoryPageItemPage() {
 
   useEffect(() => {
     document.title = TITLE;
-
     getProductOfCategory(madm);
   }, [location]);
 
   const onUpdate = (values) => {
     const tempImageURL = values.photo;
     let tempValues = { ...values };
-    console.log(values);
     setSrcImage(tempImageURL);
     tempValues.photo = "";
+    tempValues.dongia = stringToNumber(tempValues.dongia);
     resetUpdate({
       ...tempValues,
       danhmuc: madm,
@@ -164,7 +168,17 @@ export default function CategoryPageItemPage() {
       if (value.photo.length > 0) {
         const image = value.photo[0];
         const base64Image = await toBase64(image);
-        value.photo = base64Image;
+        const formData = new FormData();
+        formData.append("file", base64Image);
+        formData.append("upload_preset", "jy6ujik2");
+
+        const resImage = await axios.post(
+          "https://api.cloudinary.com/v1_1/dw59ze6aa/image/upload",
+          formData
+        );
+        if (resImage.status === 200) {
+          value.photo = resImage.data.url;
+        }
       } else {
         value.photo = "";
       }
@@ -197,7 +211,17 @@ export default function CategoryPageItemPage() {
         if (value.photo.length > 0) {
           const image = value.photo[0];
           const base64Image = await toBase64(image);
-          value.photo = base64Image;
+          const formData = new FormData();
+          formData.append("file", base64Image);
+          formData.append("upload_preset", "jy6ujik2");
+
+          const resImage = await axios.post(
+            "https://api.cloudinary.com/v1_1/dw59ze6aa/image/upload",
+            formData
+          );
+          if (resImage.status === 200) {
+            value.photo = resImage.data.url;
+          }
         } else {
           value.photo = srcImage;
         }
@@ -219,23 +243,37 @@ export default function CategoryPageItemPage() {
         }
       } catch (err) {
         hidden();
-        notificationErorr(UPDATE_CATEGORY_FAIL, 3000);
+        notificationErorr("Lỗi tải hình ảnh", 3000);
         console.log(err);
       }
     }
   };
   let temp = [];
   if (listProduct.length > 0) {
-    temp = listProduct.filter((value) => {
-      return (
-        value.masp.toLowerCase().trim().indexOf(search.toLowerCase().trim()) !==
-          -1 ||
-        value.tensp
-          .toLowerCase()
-          .trim()
-          .indexOf(search.toLowerCase().trim()) !== -1
-      );
-    });
+    temp = listProduct
+      .filter((value) => {
+        return (
+          value.masp
+            .toLowerCase()
+            .trim()
+            .indexOf(search.toLowerCase().trim()) !== -1 ||
+          value.tensp
+            .toLowerCase()
+            .trim()
+            .indexOf(search.toLowerCase().trim()) !== -1
+        );
+      })
+      .map((value) => {
+        return {
+          masp: value.masp,
+          tensp: value.tensp,
+          soluong: value.soluong,
+          dongia: `${formatMoney(value.dongia.toString())}đ`,
+          mota_ngan: value.mota_ngan,
+          mota_chitiet: value.mota_chitiet,
+          photo: value.photo,
+        };
+      });
   }
   let categoryTemp = [];
   if (listCategory.length > 0) {

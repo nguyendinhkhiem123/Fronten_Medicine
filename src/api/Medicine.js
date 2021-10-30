@@ -12,3 +12,6 @@ export const updateMedicine = (body)=>{
 export const deleteMedicine = (id)=>{
     return axiosClient.delete(`/nhathuoc/${id}`);
 }
+export const insertMedicine = (body)=>{
+    return axiosClient.post('/register' , body)
+}

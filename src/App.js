@@ -10,6 +10,7 @@ import Login from "pages/Login";
 
 import "assets/styles/tailwind.css";
 import "react-toastify/dist/ReactToastify.css";
+import 'react-medium-image-zoom/dist/styles.css'
 
 import { useSelector } from "react-redux";
 import { Suspense } from "react";

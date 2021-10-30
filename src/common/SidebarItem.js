@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, Route } from "react-router-dom";
-export default function SidebarItem({ title, link, icon }) {
-  const MenuLink = ({ label, to, activeOnLyWhenExact, icon }) => {
+export default function SidebarItem({ title, link, icon  }) {
+  const MenuLink = ({ label, to, activeOnLyWhenExact, icon   }) => {
     return (
       <Route
         path={to}

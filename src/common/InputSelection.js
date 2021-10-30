@@ -8,7 +8,7 @@ export default function InputSelection({
   arrOption,
   register,
   title,
-  disable
+  disable,
 }) {
   return (
     <div className="mb-1">
@@ -18,7 +18,7 @@ export default function InputSelection({
         </span>
         <select
           name={name}
-          className={`${disable? 'bg-gray-400' : ''} group w-full outline-none font-light pr-4 pl-12 py-2 border-b-[3px] text-sm ${
+          className={`${disable? 'bg-gray-400' : ''} group w-full outline-none font-light pr-4 pl-11 py-2 border-b-[3px] text-sm ${
             errors ? "border-red-500" : "border-gray-400  focus:border-blue-400"
           } `}
           {...register(name)}

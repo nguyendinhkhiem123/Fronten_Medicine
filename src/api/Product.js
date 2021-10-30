@@ -1,6 +1,9 @@
 import axiosClient from "../axios";
 
 
+export const getAllProduct = ()=>{
+    return axiosClient.get('sanpham');
+}
 export const getListOfCategory = (madm)=>{
     return axiosClient.get(`/sanpham/danhmuc/${madm}`);
 }

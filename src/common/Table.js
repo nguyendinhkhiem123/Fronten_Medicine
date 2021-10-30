@@ -2,17 +2,22 @@ import Card from "@material-tailwind/react/Card";
 import CardHeader from "@material-tailwind/react/CardHeader";
 import CardBody from "@material-tailwind/react/CardBody";
 import Label from "@material-tailwind/react/Label";
-
 import SearchBox from "./SearchBox";
+import SelectSearch from "./SelectSearch";
+import Zoom from "react-medium-image-zoom";
+
 export default function CardTable({
   title,
   arrTitle,
   arrContent,
-  status,
   arrActivity,
-  key,
   onAdd,
   setSearch,
+  className,
+  searchNull,
+  setOption,
+  arrOption,
+  children
 }) {
   const renderObjectElement = (element) => {
     const list = [];
@@ -20,7 +25,9 @@ export default function CardTable({
       const item = (
         <th className="border-b border-gray-200 align-middle font-light text-sm whitespace-nowrap px-2 py-4 text-left">
           {element[property]?.toString().startsWith("http") ? (
-            <img className="w-6/12 h-6/12 " src={element[property]} alt="Img"/>
+            <Zoom zoomMargin>
+              <img className="w-16 h-16 " src={element[property]} alt="Img" />
+            </Zoom>
           ) : element[property]?.toString().length > 50 ? (
             element[property].toString().slice(0, 50) + "..."
           ) : (
@@ -33,13 +40,19 @@ export default function CardTable({
     return list;
   };
   return (
-    <Card>
+    <Card className={className}>
       <CardHeader color="purple" contentPosition="left">
         <h2 className="text-white text-2xl">{title}</h2>
       </CardHeader>
       <CardBody>
-        <div className="flex items-end gap-x-10 mb-4 justify-between sm:justify-start">
-          <SearchBox setSearch={setSearch} />
+        <div className="mb-10">
+            {children}
+        </div>
+        <div className="flex flex-wrap gap-y-4 items-center gap-x-10 mb-4 justify-between sm:justify-start">
+          {searchNull ? null : <SearchBox setSearch={setSearch} />}
+          {setOption ? (
+            <SelectSearch setOption={setOption} arrOption={arrOption} />
+          ) : null}
           {onAdd ? (
             <div>
               <Label color="green">
@@ -71,16 +84,16 @@ export default function CardTable({
               </tr>
             </thead>
             <tbody>
-              {arrContent && arrContent.length > 0
-                ? arrContent.map((value, index) => {
-                    return (
-                      <tr key={index}>
-                        <th className="border-b border-gray-200 align-middle font-light text-sm whitespace-nowrap px-2 py-4 text-left">
-                          {index + 1}
-                        </th>
-                        {renderObjectElement(value)}
-                        {arrActivity ? (
-                          arrActivity.map((valueOne, indexOne) => {
+              {arrContent && arrContent.length > 0 ? (
+                arrContent.map((value, index) => {
+                  return (
+                    <tr key={index}>
+                      <th className="border-b border-gray-200 align-middle font-light text-sm whitespace-nowrap px-2 py-4 text-left">
+                        {index + 1}
+                      </th>
+                      {renderObjectElement(value)}
+                      {arrActivity
+                        ? arrActivity.map((valueOne, indexOne) => {
                             return (
                               <th
                                 key={indexOne}
@@ -100,16 +113,15 @@ export default function CardTable({
                               </th>
                             );
                           })
-                        ) : (
-                          null
-                        )}
-                      </tr>
-                    );
-                  })
-                : 
-                
-                <th className="border-b border-gray-200 align-middle font-light text-xl whitespace-nowrap px-2 py-4 text-left">Không có dữ liệu</th>
-                }
+                        : null}
+                    </tr>
+                  );
+                })
+              ) : (
+                <th className="border-b border-gray-200 align-middle font-light text-xl whitespace-nowrap px-2 py-4 text-left">
+                  Không có dữ liệu
+                </th>
+              )}
             </tbody>
           </table>
         </div>

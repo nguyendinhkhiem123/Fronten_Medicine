@@ -10,15 +10,14 @@ import { addListCategory } from "reducer/Category";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import  useLoading from '../hook/HookLoading';
+import useLoading from "../hook/HookLoading";
 
 export default function Sidebar() {
   const [showSidebar, setShowSidebar] = useState("-left-64");
   const [collapse, setCollapse] = useState(false);
-
-  const [ hidden , display , loading ] = useLoading();
-
+  const [hidden, display, loading] = useLoading();
   const category = useSelector((state) => state.Category);
+  const CurrentUser = useSelector((state) => state.CurrentUser);
   const dispatch = useDispatch();
 
   const onClick = () => {
@@ -32,7 +31,7 @@ export default function Sidebar() {
       const res = await getListCategory();
       if (res.status === 200) {
         dispatch(addListCategory(res.data));
-        hidden()
+        hidden();
       }
     } catch (err) {
       console.log(err);
@@ -44,62 +43,117 @@ export default function Sidebar() {
     getCategory();
   }, []);
 
-  const navTemp = [
-    {
-      title: "THỐNG KÊ",
-      icon: "dashboard",
-      link: "/",
-      sub: [],
-    },
-    {
-      title: "DANH MỤC",
-      icon: "folder",
-      link: "",
-      sub: [
-        {
-          title: "QUẢN LÍ",
-          icon: "description",
-          link: "/quan-ly-danh-muc",
-        },
-      ],
-    },
-    {
-      title: "NHÀ THUỐC",
-      icon: "map",
-      link: "/nha-thuoc",
-      sub: [],
-    },
-    {
-      title: "NHÂN VIÊN",
-      icon: "badge",
-      link: "/nhan-vien",
-      sub: [],
-    },
-    {
-      title: "NHẬP HÀNG",
-      icon: "list_alt",
-      link: "/nhap-hang",
-      sub: [],
-    },
-    {
-      title: "ĐƠN HÀNG",
-      icon: "payments",
-      link: "/don-hang",
-      sub: [],
-    },
-    {
-      title: "BÌNH LUẬN",
-      icon: "question_answer",
-      link: "/binh-luan",
-      sub: [],
-    },
-    {
-      title: "ĐÁNH GIÁ",
-      icon: "thumb_up",
-      link: "/danh-gia",
-      sub: [],
-    },
-  ];
+  let navTemp = [];
+
+  navTemp =
+    CurrentUser.taikhoan?.quyen.maquyen === 1
+      ? [
+          {
+            title: "THỐNG KÊ",
+            icon: "dashboard",
+            link: "/",
+            sub: [],
+          },     
+          {
+            title: "DANH MỤC",
+            icon: "folder",
+            link: "",
+            sub: [
+              {
+                title: "QUẢN LÍ",
+                icon: "description",
+                link: "/quan-ly-danh-muc",
+              },
+            ],
+          },
+          {
+            title: "NHÀ THUỐC",
+            icon: "map",
+            link: "/nha-thuoc",
+            sub: [],
+          },
+
+          {
+            title: "NHÂN VIÊN",
+            icon: "badge",
+            link: "/nhan-vien",
+            sub: [],
+          },
+          {
+            title: "NHẬP HÀNG",
+            icon: "list_alt",
+            link: "/nhap-hang",
+            sub: [],
+          },
+          {
+            title: "ĐƠN HÀNG",
+            icon: "payments",
+            link: "/don-hang",
+            sub: [],
+          },
+          {
+            title: "vỀ CHÚNG TÔI",
+            icon: "question_answer",
+            link: "/ve-chung-toi",
+            sub: [],
+          },
+          {
+            title: "LIÊN HỆ",
+            icon: "thumb_up",
+            link: "/lien-he",
+            sub: [],
+          },
+        ]
+      : [
+          {
+            title: "THỐNG KÊ ",
+            icon: "dashboard",
+            link: "/",
+            sub: [],
+          },
+          {
+            title: "DANH MỤC",
+            icon: "folder",
+            link: "",
+            sub: [
+              {
+                title: "QUẢN LÍ",
+                icon: "description",
+                link: "/quan-ly-danh-muc",
+              },
+            ],
+          },
+          {
+            title: "NHÀ THUỐC",
+            icon: "map",
+            link: "/nha-thuoc",
+            sub: [],
+          },
+          {
+            title: "NHẬP HÀNG",
+            icon: "list_alt",
+            link: "/nhap-hang",
+            sub: [],
+          },
+          {
+            title: "ĐƠN HÀNG",
+            icon: "payments",
+            link: "/don-hang",
+            sub: [],
+          },
+          {
+            title: "vỀ CHÚNG TÔI",
+            icon: "question_answer",
+            link: "/ve-chung-toi",
+            sub: [],
+          },
+          {
+            title: "LIÊN HỆ",
+            icon: "thumb_up",
+            link: "/lien-he",
+            sub: [],
+          },
+        ];
 
   if (category.length > 0) {
     category.forEach((element) => {
@@ -111,7 +165,7 @@ export default function Sidebar() {
     });
   }
   const listNavMap = navTemp.map((value, index) => {
-    if (value.sub.length > 0) {
+    if (value && value.sub.length > 0) {
       const height = value.sub.length * 56;
       return (
         <div className="overflow-hidden " key={index}>
@@ -176,10 +230,10 @@ export default function Sidebar() {
             rel="noreferrer"
             className=" cursor-pointer mt-2  w-full gap-x-2 flex items-end justify-center"
           >
-             <span className="material-icons text-6xl inline-block text-blue-500">bloodtype</span>
-            <H6 color="gray">
-              NHÀ THUỐC
-            </H6>
+            <span className="material-icons text-6xl inline-block text-blue-500">
+              bloodtype
+            </span>
+            <H6 color="gray">NHÀ THUỐC</H6>
           </Link>
           <div className="flex flex-col">
             <hr className="my-4 min-w-full" />
