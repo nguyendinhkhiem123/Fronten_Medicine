@@ -165,7 +165,7 @@ export default function OrderPage() {
           tensp: value.sanpham.tensp,
           hinhanh: value.sanpham.photo,
           soluong: value.soluong,
-          dongia: `${formatMoney(value.sanpham.dongia.toString())}đ`,
+          dongia: `${formatMoney(value.giaban.toString())}đ`,
           thanhtien: `${formatMoney(
             (value.sanpham.dongia * value.soluong).toString()
           )}đ`,
