@@ -53,7 +53,7 @@ export default function Sidebar() {
             icon: "dashboard",
             link: "/",
             sub: [],
-          },     
+          },
           {
             title: "DANH MỤC",
             icon: "folder",
@@ -127,6 +127,12 @@ export default function Sidebar() {
             title: "NHÀ THUỐC",
             icon: "map",
             link: "/nha-thuoc",
+            sub: [],
+          },
+          {
+            title: "NHÂN VIÊN",
+            icon: "badge",
+            link: "/nhan-vien",
             sub: [],
           },
           {

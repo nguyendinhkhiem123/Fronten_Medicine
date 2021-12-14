@@ -108,7 +108,7 @@ export default function PageVisitsCard() {
                   Ngày
                 </th>
                 <th className="px-2 text-teal-500 align-middle border-b border-solid border-gray-200 py-3 text-sm whitespace-nowrap font-light text-left">
-                  Doanh thu
+                  Chí phí
                 </th>
               </tr>
             </thead>

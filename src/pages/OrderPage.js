@@ -80,8 +80,10 @@ export default function OrderPage() {
     try {
       display();
       const res = await getListOrder();
+      console.log(res);
       if (res.status === 200) {
         hidden();
+        console.log("Success")
         dispatch(addOrder(res.data));
       }
     } catch (err) {
@@ -167,7 +169,7 @@ export default function OrderPage() {
           soluong: value.soluong,
           dongia: `${formatMoney(value.giaban.toString())}đ`,
           thanhtien: `${formatMoney(
-            (value.sanpham.dongia * value.soluong).toString()
+            (value.giaban * value.soluong).toString()
           )}đ`,
         };
       });
@@ -216,7 +218,7 @@ export default function OrderPage() {
                 pi: payment,
               }),
             ]);
-
+              console.log("Success" , res);
             if (res[0].status === 200) {
               hidden();
               getOrder();

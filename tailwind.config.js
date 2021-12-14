@@ -10,7 +10,6 @@ module.exports = {
             serif: ['"Roboto Slab"', 'serif'],
             body: ['Roboto', 'sans-serif'],
         },
-        
         extend: {
             fontSize : {
                 'text-300px' : '300px',

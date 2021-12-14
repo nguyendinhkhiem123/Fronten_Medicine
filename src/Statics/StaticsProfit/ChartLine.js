@@ -255,14 +255,14 @@ export default function ChartLine() {
         <div className="text-right flex flex-col gap-y-3 mt-12">
             <div className="font-bold text-2xl">Tổng lợi nhuận trong năm </div>
           <div>
-            Doanh thu :{" "}
+            Doanh thu bán hàng :{" "}
             <span className="font-bold">
               {" "}
               {formatMoney(total(statics.oldYear).toString())}đ
             </span>
           </div>
           <div>
-            Chi phí :{" "}
+            Chi phí nhập hàng :{" "}
             <span className="font-bold">
               {formatMoney(total(statics.newYear).toString())}đ
             </span>

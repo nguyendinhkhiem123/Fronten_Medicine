@@ -50,7 +50,6 @@ function App() {
                 </div>
               </>
             </Suspense>
-
             <Footer />
           </div>
         </div>

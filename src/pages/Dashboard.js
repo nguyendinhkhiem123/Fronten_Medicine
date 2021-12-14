@@ -9,7 +9,7 @@ import StaticsExport from "Statics/StaticsExport/index";
 import StaticsOrder from "Statics/StaticsOrder/index";
 import StaticsImport from "Statics/StaticsImport/index";
 import StaticsProfit from "Statics/StaticsProfit/index";
-
+import StaticsInven from "Statics/StaticsInven/index";
 export default function Dashboard() {
   const [openTab, setOpenTab] = useState(1);
 
@@ -49,6 +49,7 @@ export default function Dashboard() {
         >
           Lợi nhuận
         </TabItem>
+       
         <TabItem
           onClick={(e) => {
             e.preventDefault();
@@ -59,6 +60,17 @@ export default function Dashboard() {
           href="tabItem"
         >
           Đơn hàng
+        </TabItem>
+        <TabItem
+          onClick={(e) => {
+            e.preventDefault();
+            setOpenTab(5);
+          }}
+          ripple="light"
+          active={openTab === 5 ? true : false}
+          href="tabItem"
+        >
+          Tồn kho
         </TabItem>
       </TabList>
 
@@ -74,6 +86,9 @@ export default function Dashboard() {
         </TabPane>
         <TabPane active={openTab === 4 ? true : false}>
           <StaticsOrder />
+        </TabPane>
+        <TabPane active={openTab === 5 ? true : false}>
+          <StaticsInven />
         </TabPane>
       </TabContent>
     </Tab>
